@@ -1,18 +1,7 @@
-#===============================================================================
-rsconnect::setAccountInfo(name='nnrjmr-nefertari-pramudhita',
-                          token='48D67B20BC9572DA6EADDA180EC102F6',
-                          secret='uY0nzEd2dY6MgX9IJA//AGl0GhRYBzmziuuxZcWt')
-
-library(rsconnect)
-rsconnect::deployApp('~/Documents/Rando/Leaflet')
-#===============================================================================
-
 library(RSocrata)
-# token <- "AK86dDRLLkYE0a1kpRAqnns3s"
-df <- read.socrata("https://data.cityofnewyork.us/resource/be8n-q3nj.csv",
-                   #app_token = token
-                   )
+df <- read.socrata("https://data.cityofnewyork.us/resource/be8n-q3nj.csv")
 
+# for faster access in local drive
 # library(readr)
 # df <- read_delim("data/Noise_Complaints__in_2017_.csv",
 #            delim = ";", escape_double = FALSE, trim_ws = TRUE)
