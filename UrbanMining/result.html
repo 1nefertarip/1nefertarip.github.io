@@ -158,10 +158,14 @@ map.on('mouseleave', 'lyr_Steel_2_0', function () {
             var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
 
             if (typeof visibility === 'undefined' || visibility == 'visible') {
-                map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-                this.className = '';
-            } else {
-                this.className = 'active';
+                for (var j = 0; j < toggleableLayerIds.length; j=j+2) {
+                    var layerId = toggleableLayerIds[j];
+                    var layerLink = document.querySelector(`a[layer="${layerId}"]`);
+                    layerLink.className = '';
+                    map.setLayoutProperty(layerId, 'visibility', 'none');
+                  }
+
+            this.className = 'active';
                 map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
             }
         };
