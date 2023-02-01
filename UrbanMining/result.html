@@ -30,13 +30,29 @@
         <script src="js/rbush.min.js"></script>
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
-        <script src="data/MinCopper_1.js"></script>
-        <script src="data/MaxCopper_2.js"></script>
-        <script src="data/MaxSteel_3.js"></script>
-        <script src="data/MinSteel_4.js"></script>
+        <script src="data/CopperMin_1.js"></script>
+        <script src="data/CopperMax_2.js"></script>
+        <script src="data/MinSteel_3.js"></script>
+        <script src="data/MaxSteel_4.js"></script>
         <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
         var map = L.map('map', {
-            zoomControl:true, maxZoom:15, minZoom:7
+            zoomControl:true, maxZoom:25, minZoom:13
         })
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
@@ -54,152 +70,65 @@
             pane: 'pane_dark_nolabels_0',
             opacity: 1.0,
             attribution: '',
-            minZoom: 7,
-            maxZoom: 15,
+            minZoom: 13,
+            maxZoom: 25,
             minNativeZoom: 0,
             maxNativeZoom: 18
         });
         layer_dark_nolabels_0;
         map.addLayer(layer_dark_nolabels_0);
-        function pop_MinCopper_1(feature, layer) {
+        function pop_CopperMin_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
             var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">copper_min</th>\
+                        <td colspan="2">' + (feature.properties['ogc_fid'] !== null ? autolinker.link(feature.properties['ogc_fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Purpose</th>\
+                        <td>' + (feature.properties['gebruiksdo'] !== null ? autolinker.link(feature.properties['gebruiksdo'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Area (m2)</th>\
+                        <td>' + (feature.properties['area_m'] !== null ? autolinker.link(feature.properties['area_m'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Steel minimum (kg/m2)</th>\
+                        <td>' + (feature.properties['min_steel'] !== null ? autolinker.link(feature.properties['min_steel'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Steel maximum (kg/m2)</th>\
+                        <td>' + (feature.properties['max_steel'] !== null ? autolinker.link(feature.properties['max_steel'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Copper minimum (kg/m2)</th>\
                         <td>' + (feature.properties['copper_min'] !== null ? autolinker.link(feature.properties['copper_min'].toLocaleString()) : '') + '</td>\
                     </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-
-        function style_MinCopper_1_0(feature) {
-            if (feature.properties['copper_min'] >= 0.000000 && feature.properties['copper_min'] <= 0.701300 ) {
-                return {
-                pane: 'pane_MinCopper_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(255,245,235,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_min'] >= 0.701300 && feature.properties['copper_min'] <= 1.392600 ) {
-                return {
-                pane: 'pane_MinCopper_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(255,233,211,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_min'] >= 1.392600 && feature.properties['copper_min'] <= 2.083900 ) {
-                return {
-                pane: 'pane_MinCopper_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(254,215,175,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_min'] >= 2.083900 && feature.properties['copper_min'] <= 2.775200 ) {
-                return {
-                pane: 'pane_MinCopper_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(253,189,131,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_min'] >= 2.775200 && feature.properties['copper_min'] <= 3.466500 ) {
-                return {
-                pane: 'pane_MinCopper_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(253,160,87,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_min'] >= 3.466500 && feature.properties['copper_min'] <= 4.157800 ) {
-                return {
-                pane: 'pane_MinCopper_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(250,131,48,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_min'] >= 4.157800 && feature.properties['copper_min'] <= 4.849100 ) {
-                return {
-                pane: 'pane_MinCopper_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(238,101,16,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_min'] >= 4.849100 && feature.properties['copper_min'] <= 5.540400 ) {
-                return {
-                pane: 'pane_MinCopper_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(218,72,1,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_min'] >= 5.540400 && feature.properties['copper_min'] <= 6.231700 ) {
-                return {
-                pane: 'pane_MinCopper_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(171,55,2,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_min'] >= 6.231700 && feature.properties['copper_min'] <= 6.923000 ) {
-                return {
-                pane: 'pane_MinCopper_1',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(127,39,4,1.0)',
-                interactive: true,
-            }
-            }
-        }
-        map.createPane('pane_MinCopper_1');
-        map.getPane('pane_MinCopper_1').style.zIndex = 401;
-        map.getPane('pane_MinCopper_1').style['mix-blend-mode'] = 'normal';
-        var layer_MinCopper_1 = new L.geoJson(json_MinCopper_1, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_MinCopper_1',
-            layerName: 'layer_MinCopper_1',
-            pane: 'pane_MinCopper_1',
-            onEachFeature: pop_MinCopper_1,
-            style: style_MinCopper_1_0,
-        });
-        bounds_group.addLayer(layer_MinCopper_1);
-        function pop_MaxCopper_2(feature, layer) {
-            var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">copper_max</th>\
+                        <th scope="row">Copper maximum (kg/m2)</th>\
                         <td>' + (feature.properties['copper_max'] !== null ? autolinker.link(feature.properties['copper_max'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_MaxCopper_2_0(feature) {
-            if (feature.properties['copper_max'] >= 0.000000 && feature.properties['copper_max'] <= 0.701300 ) {
+        function style_CopperMin_1_0(feature) {
+            if (feature.properties['copper_min'] >= 0.010000 && feature.properties['copper_min'] <= 1.162167 ) {
                 return {
-                pane: 'pane_MaxCopper_2',
+                pane: 'pane_CopperMin_1',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -207,89 +136,49 @@
                 interactive: true,
             }
             }
-            if (feature.properties['copper_max'] >= 0.701300 && feature.properties['copper_max'] <= 1.392600 ) {
+            if (feature.properties['copper_min'] >= 1.162167 && feature.properties['copper_min'] <= 2.314333 ) {
                 return {
-                pane: 'pane_MaxCopper_2',
+                pane: 'pane_CopperMin_1',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(255,233,211,1.0)',
+                fillColor: 'rgba(254,219,183,1.0)',
                 interactive: true,
             }
             }
-            if (feature.properties['copper_max'] >= 1.392600 && feature.properties['copper_max'] <= 2.083900 ) {
+            if (feature.properties['copper_min'] >= 2.314333 && feature.properties['copper_min'] <= 3.466500 ) {
                 return {
-                pane: 'pane_MaxCopper_2',
+                pane: 'pane_CopperMin_1',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(254,215,175,1.0)',
+                fillColor: 'rgba(253,172,103,1.0)',
                 interactive: true,
             }
             }
-            if (feature.properties['copper_max'] >= 2.083900 && feature.properties['copper_max'] <= 2.775200 ) {
+            if (feature.properties['copper_min'] >= 3.466500 && feature.properties['copper_min'] <= 4.618667 ) {
                 return {
-                pane: 'pane_MaxCopper_2',
+                pane: 'pane_CopperMin_1',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(253,189,131,1.0)',
+                fillColor: 'rgba(246,119,34,1.0)',
                 interactive: true,
             }
             }
-            if (feature.properties['copper_max'] >= 2.775200 && feature.properties['copper_max'] <= 3.466500 ) {
+            if (feature.properties['copper_min'] >= 4.618667 && feature.properties['copper_min'] <= 5.771000 ) {
                 return {
-                pane: 'pane_MaxCopper_2',
+                pane: 'pane_CopperMin_1',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(253,160,87,1.0)',
+                fillColor: 'rgba(209,69,1,1.0)',
                 interactive: true,
             }
             }
-            if (feature.properties['copper_max'] >= 3.466500 && feature.properties['copper_max'] <= 4.157800 ) {
+            if (feature.properties['copper_min'] >= 5.771000 && feature.properties['copper_min'] <= 7.000000 ) {
                 return {
-                pane: 'pane_MaxCopper_2',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(250,131,48,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_max'] >= 4.157800 && feature.properties['copper_max'] <= 4.849100 ) {
-                return {
-                pane: 'pane_MaxCopper_2',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(238,101,16,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_max'] >= 4.849100 && feature.properties['copper_max'] <= 5.540400 ) {
-                return {
-                pane: 'pane_MaxCopper_2',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(218,72,1,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_max'] >= 5.540400 && feature.properties['copper_max'] <= 6.231700 ) {
-                return {
-                pane: 'pane_MaxCopper_2',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(171,55,2,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['copper_max'] >= 6.231700 && feature.properties['copper_max'] <= 6.923000 ) {
-                return {
-                pane: 'pane_MaxCopper_2',
+                pane: 'pane_CopperMin_1',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -298,229 +187,194 @@
             }
             }
         }
-        map.createPane('pane_MaxCopper_2');
-        map.getPane('pane_MaxCopper_2').style.zIndex = 402;
-        map.getPane('pane_MaxCopper_2').style['mix-blend-mode'] = 'normal';
-        var layer_MaxCopper_2 = new L.geoJson(json_MaxCopper_2, {
+        map.createPane('pane_CopperMin_1');
+        map.getPane('pane_CopperMin_1').style.zIndex = 401;
+        map.getPane('pane_CopperMin_1').style['mix-blend-mode'] = 'normal';
+        var layer_CopperMin_1 = new L.geoJson(json_CopperMin_1, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_MaxCopper_2',
-            layerName: 'layer_MaxCopper_2',
-            pane: 'pane_MaxCopper_2',
-            onEachFeature: pop_MaxCopper_2,
-            style: style_MaxCopper_2_0,
+            dataVar: 'json_CopperMin_1',
+            layerName: 'layer_CopperMin_1',
+            pane: 'pane_CopperMin_1',
+            onEachFeature: pop_CopperMin_1,
+            style: style_CopperMin_1_0,
         });
-        bounds_group.addLayer(layer_MaxCopper_2);
-        function pop_MaxSteel_3(feature, layer) {
+        bounds_group.addLayer(layer_CopperMin_1);
+        function pop_CopperMax_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
             var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">max_steel</th>\
-                        <td>' + (feature.properties['max_steel'] !== null ? autolinker.link(feature.properties['max_steel'].toLocaleString()) : '') + '</td>\
+                        <td colspan="2">' + (feature.properties['ogc_fid'] !== null ? autolinker.link(feature.properties['ogc_fid'].toLocaleString()) : '') + '</td>\
                     </tr>\
-                </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
-        }
-
-        function style_MaxSteel_3_0(feature) {
-            if (feature.properties['max_steel'] >= 0.000000 && feature.properties['max_steel'] <= 10.230176 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(255,255,204,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 10.230176 && feature.properties['max_steel'] <= 20.460353 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(232,246,198,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 20.460353 && feature.properties['max_steel'] <= 30.690529 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(208,237,192,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 30.690529 && feature.properties['max_steel'] <= 40.920706 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(185,228,186,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 40.920706 && feature.properties['max_steel'] <= 51.150882 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(161,218,180,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 51.150882 && feature.properties['max_steel'] <= 61.381059 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(137,209,184,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 61.381059 && feature.properties['max_steel'] <= 71.611235 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(113,200,188,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 71.611235 && feature.properties['max_steel'] <= 81.841412 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(89,191,192,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 81.841412 && feature.properties['max_steel'] <= 92.071588 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(65,182,196,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 92.071588 && feature.properties['max_steel'] <= 102.301765 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(59,168,193,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 102.301765 && feature.properties['max_steel'] <= 112.531941 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(54,155,190,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 112.531941 && feature.properties['max_steel'] <= 122.762118 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(49,141,187,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 122.762118 && feature.properties['max_steel'] <= 132.992294 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(44,127,184,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 132.992294 && feature.properties['max_steel'] <= 143.222471 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(42,108,175,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 143.222471 && feature.properties['max_steel'] <= 153.452647 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(40,89,166,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 153.452647 && feature.properties['max_steel'] <= 163.682824 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(38,71,157,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['max_steel'] >= 163.682824 && feature.properties['max_steel'] <= 173.913000 ) {
-                return {
-                pane: 'pane_MaxSteel_3',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(37,52,148,1.0)',
-                interactive: true,
-            }
-            }
-        }
-        map.createPane('pane_MaxSteel_3');
-        map.getPane('pane_MaxSteel_3').style.zIndex = 403;
-        map.getPane('pane_MaxSteel_3').style['mix-blend-mode'] = 'normal';
-        var layer_MaxSteel_3 = new L.geoJson(json_MaxSteel_3, {
-            attribution: '',
-            interactive: true,
-            dataVar: 'json_MaxSteel_3',
-            layerName: 'layer_MaxSteel_3',
-            pane: 'pane_MaxSteel_3',
-            onEachFeature: pop_MaxSteel_3,
-            style: style_MaxSteel_3_0,
-        });
-        bounds_group.addLayer(layer_MaxSteel_3);
-        map.addLayer(layer_MaxSteel_3);
-        function pop_MinSteel_4(feature, layer) {
-            var popupContent = '<table>\
                     <tr>\
-                        <th scope="row">min_steel</th>\
+                        <th scope="row">Purpose</th>\
+                        <td>' + (feature.properties['gebruiksdo'] !== null ? autolinker.link(feature.properties['gebruiksdo'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Area (m2)</th>\
+                        <td>' + (feature.properties['area_m'] !== null ? autolinker.link(feature.properties['area_m'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Steel minimum (kg/m2)</th>\
                         <td>' + (feature.properties['min_steel'] !== null ? autolinker.link(feature.properties['min_steel'].toLocaleString()) : '') + '</td>\
                     </tr>\
+                    <tr>\
+                        <th scope="row">Steel maximum (kg/m2)</th>\
+                        <td>' + (feature.properties['max_steel'] !== null ? autolinker.link(feature.properties['max_steel'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Copper minimum (kg/m2)</th>\
+                        <td>' + (feature.properties['copper_min'] !== null ? autolinker.link(feature.properties['copper_min'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Copper maximum (kg/m2)</th>\
+                        <td>' + (feature.properties['copper_max'] !== null ? autolinker.link(feature.properties['copper_max'].toLocaleString()) : '') + '</td>\
+                    </tr>\
                 </table>';
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_MinSteel_4_0(feature) {
-            if (feature.properties['min_steel'] >= 0.000000 && feature.properties['min_steel'] <= 10.230176 ) {
+        function style_CopperMax_2_0(feature) {
+            if (feature.properties['copper_max'] >= 0.010000 && feature.properties['copper_max'] <= 1.162167 ) {
                 return {
-                pane: 'pane_MinSteel_4',
+                pane: 'pane_CopperMax_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,245,235,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['copper_max'] >= 1.162167 && feature.properties['copper_max'] <= 2.314333 ) {
+                return {
+                pane: 'pane_CopperMax_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,219,183,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['copper_max'] >= 2.314333 && feature.properties['copper_max'] <= 3.466500 ) {
+                return {
+                pane: 'pane_CopperMax_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,172,103,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['copper_max'] >= 3.466500 && feature.properties['copper_max'] <= 4.618667 ) {
+                return {
+                pane: 'pane_CopperMax_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(246,119,34,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['copper_max'] >= 4.618667 && feature.properties['copper_max'] <= 5.771000 ) {
+                return {
+                pane: 'pane_CopperMax_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(209,69,1,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['copper_max'] >= 5.771000 && feature.properties['copper_max'] <= 7.000000 ) {
+                return {
+                pane: 'pane_CopperMax_2',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(127,39,4,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_CopperMax_2');
+        map.getPane('pane_CopperMax_2').style.zIndex = 402;
+        map.getPane('pane_CopperMax_2').style['mix-blend-mode'] = 'normal';
+        var layer_CopperMax_2 = new L.geoJson(json_CopperMax_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_CopperMax_2',
+            layerName: 'layer_CopperMax_2',
+            pane: 'pane_CopperMax_2',
+            onEachFeature: pop_CopperMax_2,
+            style: style_CopperMax_2_0,
+        });
+        bounds_group.addLayer(layer_CopperMax_2);
+        function pop_MinSteel_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ogc_fid'] !== null ? autolinker.link(feature.properties['ogc_fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Purpose</th>\
+                        <td>' + (feature.properties['gebruiksdo'] !== null ? autolinker.link(feature.properties['gebruiksdo'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Area (m2)</th>\
+                        <td>' + (feature.properties['area_m'] !== null ? autolinker.link(feature.properties['area_m'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Steel minimum (kg/m2)</th>\
+                        <td>' + (feature.properties['min_steel'] !== null ? autolinker.link(feature.properties['min_steel'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Steel maximum (kg/m2)</th>\
+                        <td>' + (feature.properties['max_steel'] !== null ? autolinker.link(feature.properties['max_steel'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Copper minimum (kg/m2)</th>\
+                        <td>' + (feature.properties['copper_min'] !== null ? autolinker.link(feature.properties['copper_min'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Copper maximum (kg/m2)</th>\
+                        <td>' + (feature.properties['copper_max'] !== null ? autolinker.link(feature.properties['copper_max'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MinSteel_3_0(feature) {
+            if (feature.properties['min_steel'] >= 0.000000 && feature.properties['min_steel'] <= 21.739125 ) {
+                return {
+                pane: 'pane_MinSteel_3',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -528,159 +382,69 @@
                 interactive: true,
             }
             }
-            if (feature.properties['min_steel'] >= 10.230176 && feature.properties['min_steel'] <= 20.460353 ) {
+            if (feature.properties['min_steel'] >= 21.739125 && feature.properties['min_steel'] <= 43.478250 ) {
                 return {
-                pane: 'pane_MinSteel_4',
+                pane: 'pane_MinSteel_3',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(232,246,198,1.0)',
+                fillColor: 'rgba(202,234,191,1.0)',
                 interactive: true,
             }
             }
-            if (feature.properties['min_steel'] >= 20.460353 && feature.properties['min_steel'] <= 30.690529 ) {
+            if (feature.properties['min_steel'] >= 43.478250 && feature.properties['min_steel'] <= 65.217375 ) {
                 return {
-                pane: 'pane_MinSteel_4',
+                pane: 'pane_MinSteel_3',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(208,237,192,1.0)',
+                fillColor: 'rgba(147,213,182,1.0)',
                 interactive: true,
             }
             }
-            if (feature.properties['min_steel'] >= 30.690529 && feature.properties['min_steel'] <= 40.920706 ) {
+            if (feature.properties['min_steel'] >= 65.217375 && feature.properties['min_steel'] <= 86.956500 ) {
                 return {
-                pane: 'pane_MinSteel_4',
+                pane: 'pane_MinSteel_3',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(185,228,186,1.0)',
+                fillColor: 'rgba(92,193,192,1.0)',
                 interactive: true,
             }
             }
-            if (feature.properties['min_steel'] >= 40.920706 && feature.properties['min_steel'] <= 51.150882 ) {
+            if (feature.properties['min_steel'] >= 86.956500 && feature.properties['min_steel'] <= 108.695625 ) {
                 return {
-                pane: 'pane_MinSteel_4',
+                pane: 'pane_MinSteel_3',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(161,218,180,1.0)',
+                fillColor: 'rgba(59,166,193,1.0)',
                 interactive: true,
             }
             }
-            if (feature.properties['min_steel'] >= 51.150882 && feature.properties['min_steel'] <= 61.381059 ) {
+            if (feature.properties['min_steel'] >= 108.695625 && feature.properties['min_steel'] <= 130.434750 ) {
                 return {
-                pane: 'pane_MinSteel_4',
+                pane: 'pane_MinSteel_3',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(137,209,184,1.0)',
+                fillColor: 'rgba(47,135,186,1.0)',
                 interactive: true,
             }
             }
-            if (feature.properties['min_steel'] >= 61.381059 && feature.properties['min_steel'] <= 71.611235 ) {
+            if (feature.properties['min_steel'] >= 130.434750 && feature.properties['min_steel'] <= 152.173875 ) {
                 return {
-                pane: 'pane_MinSteel_4',
+                pane: 'pane_MinSteel_3',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
-                fillColor: 'rgba(113,200,188,1.0)',
+                fillColor: 'rgba(41,95,169,1.0)',
                 interactive: true,
             }
             }
-            if (feature.properties['min_steel'] >= 71.611235 && feature.properties['min_steel'] <= 81.841412 ) {
+            if (feature.properties['min_steel'] >= 152.173875 && feature.properties['min_steel'] <= 173.913000 ) {
                 return {
-                pane: 'pane_MinSteel_4',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(89,191,192,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['min_steel'] >= 81.841412 && feature.properties['min_steel'] <= 92.071588 ) {
-                return {
-                pane: 'pane_MinSteel_4',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(65,182,196,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['min_steel'] >= 92.071588 && feature.properties['min_steel'] <= 102.301765 ) {
-                return {
-                pane: 'pane_MinSteel_4',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(59,168,193,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['min_steel'] >= 102.301765 && feature.properties['min_steel'] <= 112.531941 ) {
-                return {
-                pane: 'pane_MinSteel_4',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(54,155,190,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['min_steel'] >= 112.531941 && feature.properties['min_steel'] <= 122.762118 ) {
-                return {
-                pane: 'pane_MinSteel_4',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(49,141,187,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['min_steel'] >= 122.762118 && feature.properties['min_steel'] <= 132.992294 ) {
-                return {
-                pane: 'pane_MinSteel_4',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(44,127,184,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['min_steel'] >= 132.992294 && feature.properties['min_steel'] <= 143.222471 ) {
-                return {
-                pane: 'pane_MinSteel_4',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(42,108,175,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['min_steel'] >= 143.222471 && feature.properties['min_steel'] <= 153.452647 ) {
-                return {
-                pane: 'pane_MinSteel_4',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(40,89,166,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['min_steel'] >= 153.452647 && feature.properties['min_steel'] <= 163.682824 ) {
-                return {
-                pane: 'pane_MinSteel_4',
-                stroke: false, 
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(38,71,157,1.0)',
-                interactive: true,
-            }
-            }
-            if (feature.properties['min_steel'] >= 163.682824 && feature.properties['min_steel'] <= 173.913000 ) {
-                return {
-                pane: 'pane_MinSteel_4',
+                pane: 'pane_MinSteel_3',
                 stroke: false, 
                 fill: true,
                 fillOpacity: 1,
@@ -689,21 +453,165 @@
             }
             }
         }
-        map.createPane('pane_MinSteel_4');
-        map.getPane('pane_MinSteel_4').style.zIndex = 404;
-        map.getPane('pane_MinSteel_4').style['mix-blend-mode'] = 'normal';
-        var layer_MinSteel_4 = new L.geoJson(json_MinSteel_4, {
+        map.createPane('pane_MinSteel_3');
+        map.getPane('pane_MinSteel_3').style.zIndex = 403;
+        map.getPane('pane_MinSteel_3').style['mix-blend-mode'] = 'normal';
+        var layer_MinSteel_3 = new L.geoJson(json_MinSteel_3, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_MinSteel_4',
-            layerName: 'layer_MinSteel_4',
-            pane: 'pane_MinSteel_4',
-            onEachFeature: pop_MinSteel_4,
-            style: style_MinSteel_4_0,
+            dataVar: 'json_MinSteel_3',
+            layerName: 'layer_MinSteel_3',
+            pane: 'pane_MinSteel_3',
+            onEachFeature: pop_MinSteel_3,
+            style: style_MinSteel_3_0,
         });
-        bounds_group.addLayer(layer_MinSteel_4);
+        bounds_group.addLayer(layer_MinSteel_3);
+        function pop_MaxSteel_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['ogc_fid'] !== null ? autolinker.link(feature.properties['ogc_fid'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Purpose</th>\
+                        <td>' + (feature.properties['gebruiksdo'] !== null ? autolinker.link(feature.properties['gebruiksdo'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Area (m2)</th>\
+                        <td>' + (feature.properties['area_m'] !== null ? autolinker.link(feature.properties['area_m'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Steel minimum (kg/m2)</th>\
+                        <td>' + (feature.properties['min_steel'] !== null ? autolinker.link(feature.properties['min_steel'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Steel maximum (kg/m2)</th>\
+                        <td>' + (feature.properties['max_steel'] !== null ? autolinker.link(feature.properties['max_steel'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Copper minimum (kg/m2)</th>\
+                        <td>' + (feature.properties['copper_min'] !== null ? autolinker.link(feature.properties['copper_min'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Copper maximum (kg/m2)</th>\
+                        <td>' + (feature.properties['copper_max'] !== null ? autolinker.link(feature.properties['copper_max'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_MaxSteel_4_0(feature) {
+            if (feature.properties['max_steel'] >= 0.000000 && feature.properties['max_steel'] <= 21.739125 ) {
+                return {
+                pane: 'pane_MaxSteel_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,204,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['max_steel'] >= 21.739125 && feature.properties['max_steel'] <= 43.478250 ) {
+                return {
+                pane: 'pane_MaxSteel_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(202,234,191,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['max_steel'] >= 43.478250 && feature.properties['max_steel'] <= 65.217375 ) {
+                return {
+                pane: 'pane_MaxSteel_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(147,213,182,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['max_steel'] >= 65.217375 && feature.properties['max_steel'] <= 86.956500 ) {
+                return {
+                pane: 'pane_MaxSteel_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(92,193,192,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['max_steel'] >= 86.956500 && feature.properties['max_steel'] <= 108.695625 ) {
+                return {
+                pane: 'pane_MaxSteel_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(59,166,193,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['max_steel'] >= 108.695625 && feature.properties['max_steel'] <= 130.434750 ) {
+                return {
+                pane: 'pane_MaxSteel_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(47,135,186,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['max_steel'] >= 130.434750 && feature.properties['max_steel'] <= 152.173875 ) {
+                return {
+                pane: 'pane_MaxSteel_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(41,95,169,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['max_steel'] >= 152.173875 && feature.properties['max_steel'] <= 173.913000 ) {
+                return {
+                pane: 'pane_MaxSteel_4',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(37,52,148,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_MaxSteel_4');
+        map.getPane('pane_MaxSteel_4').style.zIndex = 404;
+        map.getPane('pane_MaxSteel_4').style['mix-blend-mode'] = 'normal';
+        var layer_MaxSteel_4 = new L.geoJson(json_MaxSteel_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_MaxSteel_4',
+            layerName: 'layer_MaxSteel_4',
+            pane: 'pane_MaxSteel_4',
+            onEachFeature: pop_MaxSteel_4,
+            style: style_MaxSteel_4_0,
+        });
+        bounds_group.addLayer(layer_MaxSteel_4);
+        map.addLayer(layer_MaxSteel_4);
         var baseMaps = {};
-        L.control.layers(baseMaps,{'Min Steel<br /><table><tr><td style="text-align: center;"><img src="legend/MinSteel_4_0100.png" /></td><td>0 - 10</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_10201.png" /></td><td>10 - 20</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_20312.png" /></td><td>20 - 31</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_31413.png" /></td><td>31 - 41</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_41514.png" /></td><td>41 - 51</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_51615.png" /></td><td>51 - 61</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_61726.png" /></td><td>61 - 72</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_72827.png" /></td><td>72 - 82</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_82928.png" /></td><td>82 - 92</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_921029.png" /></td><td>92 - 102</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_10211310.png" /></td><td>102 - 113</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_11312311.png" /></td><td>113 - 123</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_12313312.png" /></td><td>123 - 133</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_13314313.png" /></td><td>133 - 143</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_14315314.png" /></td><td>143 - 153</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_15316415.png" /></td><td>153 - 164</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_4_16417416.png" /></td><td>164 - 174</td></tr></table>': layer_MinSteel_4,'Max Steel<br /><table><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_0100.png" /></td><td>0 - 10</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_10201.png" /></td><td>10 - 20</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_20312.png" /></td><td>20 - 31</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_31413.png" /></td><td>31 - 41</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_41514.png" /></td><td>41 - 51</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_51615.png" /></td><td>51 - 61</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_61726.png" /></td><td>61 - 72</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_72827.png" /></td><td>72 - 82</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_82928.png" /></td><td>82 - 92</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_921029.png" /></td><td>92 - 102</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_10211310.png" /></td><td>102 - 113</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_11312311.png" /></td><td>113 - 123</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_12313312.png" /></td><td>123 - 133</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_13314313.png" /></td><td>133 - 143</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_14315314.png" /></td><td>143 - 153</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_15316415.png" /></td><td>153 - 164</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_3_16417416.png" /></td><td>164 - 174</td></tr></table>': layer_MaxSteel_3,'Max Copper<br /><table><tr><td style="text-align: center;"><img src="legend/MaxCopper_2_0070.png" /></td><td>0 - 0,7</td></tr><tr><td style="text-align: center;"><img src="legend/MaxCopper_2_071391.png" /></td><td>0,7 - 1,39</td></tr><tr><td style="text-align: center;"><img src="legend/MaxCopper_2_1392082.png" /></td><td>1,39 - 2,08</td></tr><tr><td style="text-align: center;"><img src="legend/MaxCopper_2_2082783.png" /></td><td>2,08 - 2,78</td></tr><tr><td style="text-align: center;"><img src="legend/MaxCopper_2_2783474.png" /></td><td>2,78 - 3,47</td></tr><tr><td style="text-align: center;"><img src="legend/MaxCopper_2_3474165.png" /></td><td>3,47 - 4,16</td></tr><tr><td style="text-align: center;"><img src="legend/MaxCopper_2_4164856.png" /></td><td>4,16 - 4,85</td></tr><tr><td style="text-align: center;"><img src="legend/MaxCopper_2_4855547.png" /></td><td>4,85 - 5,54</td></tr><tr><td style="text-align: center;"><img src="legend/MaxCopper_2_5546238.png" /></td><td>5,54 - 6,23</td></tr><tr><td style="text-align: center;"><img src="legend/MaxCopper_2_6236929.png" /></td><td>6,23 - 6,92</td></tr></table>': layer_MaxCopper_2,'Min Copper<br /><table><tr><td style="text-align: center;"><img src="legend/MinCopper_1_001070.png" /></td><td>0,01 - 0,7</td></tr><tr><td style="text-align: center;"><img src="legend/MinCopper_1_071391.png" /></td><td>0,7 - 1,39</td></tr><tr><td style="text-align: center;"><img src="legend/MinCopper_1_1392082.png" /></td><td>1,39 - 2,08</td></tr><tr><td style="text-align: center;"><img src="legend/MinCopper_1_2082783.png" /></td><td>2,08 - 2,78</td></tr><tr><td style="text-align: center;"><img src="legend/MinCopper_1_2783474.png" /></td><td>2,78 - 3,47</td></tr><tr><td style="text-align: center;"><img src="legend/MinCopper_1_3474165.png" /></td><td>3,47 - 4,16</td></tr><tr><td style="text-align: center;"><img src="legend/MinCopper_1_4164856.png" /></td><td>4,16 - 4,85</td></tr><tr><td style="text-align: center;"><img src="legend/MinCopper_1_4855547.png" /></td><td>4,85 - 5,54</td></tr><tr><td style="text-align: center;"><img src="legend/MinCopper_1_5546238.png" /></td><td>5,54 - 6,23</td></tr><tr><td style="text-align: center;"><img src="legend/MinCopper_1_6236929.png" /></td><td>6,23 - 6,92</td></tr></table>': layer_MinCopper_1,"dark_nolabels": layer_dark_nolabels_0,}).addTo(map);
+        L.control.layers(baseMaps,{'Max Steel<br /><table><tr><td style="text-align: center;"><img src="legend/MaxSteel_4_0220.png" /></td><td>0 - 22</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_4_22431.png" /></td><td>22 - 43</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_4_43652.png" /></td><td>43 - 65</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_4_65873.png" /></td><td>65 - 87</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_4_871094.png" /></td><td>87 - 109</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_4_1091305.png" /></td><td>109 - 130</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_4_1301526.png" /></td><td>130 - 152</td></tr><tr><td style="text-align: center;"><img src="legend/MaxSteel_4_1521747.png" /></td><td>152 - 174</td></tr></table>': layer_MaxSteel_4,'Min Steel<br /><table><tr><td style="text-align: center;"><img src="legend/MinSteel_3_0220.png" /></td><td>0 - 22</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_3_22431.png" /></td><td>22 - 43</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_3_43652.png" /></td><td>43 - 65</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_3_65873.png" /></td><td>65 - 87</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_3_871094.png" /></td><td>87 - 109</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_3_1091305.png" /></td><td>109 - 130</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_3_1301526.png" /></td><td>130 - 152</td></tr><tr><td style="text-align: center;"><img src="legend/MinSteel_3_1521747.png" /></td><td>152 - 174</td></tr></table>': layer_MinSteel_3,'Copper Max<br /><table><tr><td style="text-align: center;"><img src="legend/CopperMax_2_0120.png" /></td><td>0 - 1,2</td></tr><tr><td style="text-align: center;"><img src="legend/CopperMax_2_12231.png" /></td><td>1,2 - 2,3</td></tr><tr><td style="text-align: center;"><img src="legend/CopperMax_2_23352.png" /></td><td>2,3 - 3,5</td></tr><tr><td style="text-align: center;"><img src="legend/CopperMax_2_35463.png" /></td><td>3,5 - 4,6</td></tr><tr><td style="text-align: center;"><img src="legend/CopperMax_2_46584.png" /></td><td>4,6 - 5,8</td></tr><tr><td style="text-align: center;"><img src="legend/CopperMax_2_5875.png" /></td><td>5,8 - 7</td></tr></table>': layer_CopperMax_2,'Copper Min<br /><table><tr><td style="text-align: center;"><img src="legend/CopperMin_1_0120.png" /></td><td>0 - 1,2</td></tr><tr><td style="text-align: center;"><img src="legend/CopperMin_1_12231.png" /></td><td>1,2 - 2,3</td></tr><tr><td style="text-align: center;"><img src="legend/CopperMin_1_23352.png" /></td><td>2,3 - 3,5</td></tr><tr><td style="text-align: center;"><img src="legend/CopperMin_1_35463.png" /></td><td>3,5 - 4,6</td></tr><tr><td style="text-align: center;"><img src="legend/CopperMin_1_46584.png" /></td><td>4,6 - 5,8</td></tr><tr><td style="text-align: center;"><img src="legend/CopperMin_1_5875.png" /></td><td>5,8 - 7</td></tr></table>': layer_CopperMin_1,"dark_nolabels": layer_dark_nolabels_0,}).addTo(map);
         setBounds();
         </script>
     </body>
