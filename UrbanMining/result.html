@@ -138,40 +138,46 @@ map.on('mouseenter', 'lyr_Steel_2_0', function () {
 map.on('mouseleave', 'lyr_Steel_2_0', function () {
     map.getCanvas().style.cursor = '';
 });
-    var toggleableLayerIds = ['lyr_Steel_2_0', 'Steel','lyr_Copper_1_0', 'Copper','lyr_dark_nolabels_0_0', 'Basemaps'];
+var toggleableLayerIds = ['lyr_Steel_2_0', 'Steel','lyr_Copper_1_0', 'Copper'];
 
-    for (var i = 0; i < toggleableLayerIds.length; i=i+2) {
-        var id = toggleableLayerIds[i];
-        var layerName = toggleableLayerIds[i+1]
+for (var i = 0; i < toggleableLayerIds.length; i=i+2) {
+    var id = toggleableLayerIds[i];
+    var layerName = toggleableLayerIds[i+1]
 
-        var link = document.createElement('a');
-        link.href = '#';
-        link.className = 'active';
-        link.layer = id;
-        link.textContent = layerName;
+    var link = document.createElement('a');
+    link.href = '#';
+    link.className = 'active';
+    link.layer = id;
+    link.textContent = layerName;
 
-        link.onclick = function (e) {
-            var clickedLayer = this.layer;
-            e.preventDefault();
-            e.stopPropagation();
+    link.onclick = function (e) {
+        var clickedLayer = this.layer;
+        e.preventDefault();
+        e.stopPropagation();
 
-            var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
-
-            if (typeof visibility === 'undefined' || visibility == 'visible') {
-                for (var j = 0; j < toggleableLayerIds.length; j=j+2) {
-                    var layerId = toggleableLayerIds[j];
-                    var layerLink = document.querySelector(`a[layer="${layerId}"]`);
-                    layerLink.className = '';
-                    map.setLayoutProperty(layerId, 'visibility', 'none');
-                  }
-
+        var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+        
+        // Check if there's another visible link element
+        var otherLink = document.querySelector('a.active[href="#"]:not([layer="' + clickedLayer + '"])');
+        if (otherLink) {
+            var otherLayer = otherLink.layer;
+            map.setLayoutProperty(otherLayer, 'visibility', 'none');
+            otherLink.className = '';
+        }
+        
+        if (typeof visibility === 'undefined' || visibility == 'visible') {
+            map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+            this.className = '';
+        } else {
             this.className = 'active';
-                map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-            }
-        };
+            map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+        }
+        
+    };
 
-        var layers = document.getElementById('menu');
-        layers.appendChild(link);
-    }</script>
+    var layers = document.getElementById('menu');
+    layers.appendChild(link);
+}
+</script>
     </body>
 </html>
