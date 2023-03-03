@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Two Buttons</title>
+  <script defer src="script.js"></script>
+  <style>
+    body {
+      text-align: center;
+      font-size: 40px;
+      margin: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 30px;
+      margin: 20px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background-color: #4285F4;
+      color: white;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      font-size: 2rem;
+    }
+
+    #evil-button {
+      left: 0;
+      transform: translateY(-50%);
+    }
+
+    #button2 {
+      right: 0;
+      transform: translateY(-50%);
+    }
+  </style>
+</head>
+<body>
+  <h1>Buttons</h1>
+  <button id="evil-button">Can't Touch Me</button>
+  <button id="button2">Button 2</button>
+</body>
+</html>
