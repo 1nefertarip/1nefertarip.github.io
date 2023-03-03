@@ -1,7 +1,41 @@
-#button {
-    color: black;
-    width: 150px; 
-    height: 50px; 
-    padding: 5px;
-    background-color: aquamarine;
-    position: absolute;}
+body {
+    text-align: center;
+    font-size: 40px;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+h1 {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+
+button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 30px;
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 2rem;
+  }
+  
+  #button {
+    left: calc(50% - 120px);
+  }
+  
+  #button2 {
+    right: calc(50% - 120px);
+  }
+  
